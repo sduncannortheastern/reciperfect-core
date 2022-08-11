@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const _ = require('lodash');
 const router = require('./routes/router.js');
+const path = require("path");
+const config = require("dotenv").config({ path: path.resolve(__dirname, "config.env") });
 
 const app = express();
 
@@ -18,7 +20,8 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(morgan('dev'));
-app.use(express.static('c:\\Users\\16175\\code\\reciperfect-core\\reciperfect-fs\\uploads'));
+console.log('UPLOAD_DIR: ' + process.env.UPLOAD_DIR);
+app.use(express.static(process.env.UPLOAD_DIR));
 
 //start app 
 const port = process.env.PORT || 3300;
