@@ -6,7 +6,7 @@
     "configurations": [
         {
             "name": "translator",
-            "program": "c:\\Users\\16175\\code\\reciperfect-core\\reciperfect\\app.js",
+            "program": "${workspaceFolder}\\reciperfect\\app.js",
             "request": "launch",
             "skipFiles": [
                 "<node_internals>/**"
@@ -15,7 +15,7 @@
         },
         {
             "name": "fs",
-            "program": "c:\\Users\\16175\\code\\reciperfect-core\\reciperfect-fs\\server.js",
+            "program": "${workspaceFolder}\\reciperfect-fs\\server.js",
             "request": "launch",
             "skipFiles": [
                 "<node_internals>/**"
@@ -31,7 +31,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "c:\\Users\\16175\\code\\reciperfect-core\\reciperfect-mongodb\\server.js"
+            "program": "${workspaceFolder}\\reciperfect-mongodb\\server.js"
         }
     ],
     "compounds": [
