@@ -1,8 +1,10 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const config = require("dotenv").config({ path: "C:\\Users\\16175\\code\\reciperfect-core\\reciperfect-mongodb\\config.env" });
+const path = require("path");
+const config = require("dotenv").config({ path: path.resolve(__dirname, "config.env") });
 const port = process.env.PORT;
+
 app.use(cors());
 app.use(express.json());
 app.use(require("./routes/record.js"));
