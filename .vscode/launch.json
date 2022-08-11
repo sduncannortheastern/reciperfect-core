@@ -1,0 +1,43 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "translator",
+            "program": "c:\\Users\\16175\\code\\reciperfect-core\\reciperfect\\app.js",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        {
+            "name": "fs",
+            "program": "c:\\Users\\16175\\code\\reciperfect-core\\reciperfect-fs\\server.js",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "type": "node"
+        },
+        
+
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "backend",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "c:\\Users\\16175\\code\\reciperfect-core\\reciperfect-mongodb\\server.js"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "all",
+            "configurations": ["backend", "fs", "translator"]
+        }
+    ]
+}
