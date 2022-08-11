@@ -1,6 +1,7 @@
 function processRecipe(recipe, data) {
      //move photo to uploads directory
-     recipe.mv('c:/Users/16175/code/reciperfect-fs/uploads/' + recipe.name);
+     console.log(process.env.UPLOAD_DIR + recipe.name );
+     recipe.mv(process.env.UPLOAD_DIR + recipe.name);
 
      //push file details
      data.push({
