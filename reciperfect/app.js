@@ -7,7 +7,9 @@ const fs = require("fs");
 const {Stream, Readable} = require('stream');
 const Speaker = require('speaker');
 const chokidar = require('chokidar');
-const add_url = "http://0.0.0.0:5000/record/add";
+const path = require("path");
+const config = require("dotenv").config({ path: path.resolve(__dirname, "config.env") });
+const add_url = process.env.ADD_URL;
 
 AWS.config.update({
     region: 'us-west-2'
@@ -101,7 +103,7 @@ async function translateAndDisplayRecipe(data, path) {
     let extension = pathTools.extname(path);
     let filename = pathTools.basename(path, extension);
     let fullfile = filename + extension;
-    let url = "http://localhost:3300/" + fullfile;
+    let url = process.env.FS_URL + fullfile;
     let postData = {url: url, records: JSON.parse(convertJSONString)};
     let postDataString = JSON.stringify(postData);
 
@@ -147,7 +149,9 @@ function processFile(path) {
     
 };
 
-const watcher = chokidar.watch("C:/Users/16175/code/reciperfect-fs/uploads/", {persistent: true});
+console.log('Listening for files on ' + process.env.UPLOAD_DIR);
+
+const watcher = chokidar.watch(process.env.UPLOAD_DIR, {persistent: true});
 
 watcher.on('add', path => {processFile(path);});
 
