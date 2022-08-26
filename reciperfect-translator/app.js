@@ -18,7 +18,7 @@ AWS.config.update({
 async function translateAndDisplayRecipe(data, path) {
     var translateParams = {
         SourceLanguageCode: 'auto',
-        TargetLanguageCode: 'es',
+        TargetLanguageCode: 'es-ES',
         Text: ''
     }
 
@@ -29,9 +29,9 @@ async function translateAndDisplayRecipe(data, path) {
 
     let params = {
         'Text': '',
-        'OutputFormat': 'pcm',
+        'OutputFormat': 'mp3',
         'VoiceId': 'Camila',
-        'LanguageCode': 'pt-BR'
+        'LanguageCode': 'es-ES'
     };
 
     var translateCommand = null;
@@ -39,6 +39,31 @@ async function translateAndDisplayRecipe(data, path) {
 
     let speechData = null;
     let convertedJSON = JSON.parse(JSON.stringify(data));
+
+    //Clean it up
+    convertedJSON = convertedJSON
+    .filter(item => item.BlockType == "LINE")
+    .filter(item => item.Text.indexOf(":") == -1)
+    .filter(item => item.Text.indexOf(".com") == -1)
+    .filter(item => item.Text.indexOf("takeout") == -1)
+    .filter(item => item.Text.indexOf("General") == -1)
+    .filter(item => item.Text.indexOf("Recipe") == -1)
+    .filter(item => item.Text.indexOf("U of M") == -1)
+    .filter(item => item.Text.indexOf("U Of M") == -1)
+    .filter(item => item.Text.indexOf("Ingredients") == -1)
+    .filter(item => item.Text.indexOf("Recipes On") == -1)
+    .filter(item => item.Text.indexOf("Steps") == -1)
+    .filter(item => item.Text.indexOf("Item Locations") == -1)
+    .filter(item => item.Text.indexOf("Ingredient") == -1)
+    .filter(item => item.Text.indexOf("Qty") == -1)
+    .filter(item => item.Text.indexOf("Save") == -1)
+    ;
+
+    let extension = pathTools.extname(path);
+    let filename = pathTools.basename(path, extension);
+    let fullfile = filename + extension;
+
+    data = convertedJSON;
 
     for (i=0; i<data.length; i++) {
         if (data[i].BlockType == "LINE") {
@@ -56,55 +81,31 @@ async function translateAndDisplayRecipe(data, path) {
 
             //convertedJSON[i].TranslatedText = esdata.TranslatedText;
             params.Text = esdata.TranslatedText;
-            /*let synthSpeechCommand = new SynthesizeSpeechCommand(params);
+            let synthSpeechCommand = new SynthesizeSpeechCommand(params);
             speechData = await pollyClient.send(synthSpeechCommand);
-            
-             // Create the Speaker instance
-            const player = new Speaker({
-                channels: 1,
-                bitDepth: 16,
-                sampleRate: 16000
-            });
             
             if (speechData.AudioStream instanceof Readable) {
                 //var bufferStream = new Stream.PassThrough(speechData.AudioStream);
                 //bufferStream.end(speechData.AudioStream);
+                console.log("here");
                 speechData.AudioStream.on('data', (chunk) => {
-                    player.write(chunk);
+                    fs.appendFileSync(process.env.UPLOAD_DIR + filename + '.mp3', chunk);
                 });
                 speechData.AudioStream.on('end', () => {
-                   player.end();
+                   console.log('closed');
                 });
+                
                 //await speechData.AudioStream.destroy();
             }
-            */
+            
         }
     }
 
-    //Clean it up
-    convertedJSON = convertedJSON
-                    .filter(item => item.BlockType == "LINE")
-                    .filter(item => item.Text.indexOf(":") == -1)
-                    .filter(item => item.Text.indexOf(".com") == -1)
-                    .filter(item => item.Text.indexOf("takeout") == -1)
-                    .filter(item => item.Text.indexOf("General") == -1)
-                    .filter(item => item.Text.indexOf("Recipe") == -1)
-                    .filter(item => item.Text.indexOf("U of M") == -1)
-                    .filter(item => item.Text.indexOf("U Of M") == -1)
-                    .filter(item => item.Text.indexOf("Ingredients") == -1)
-                    .filter(item => item.Text.indexOf("Recipes On") == -1)
-                    .filter(item => item.Text.indexOf("Steps") == -1)
-                    .filter(item => item.Text.indexOf("Item Locations") == -1)
-                    .filter(item => item.Text.indexOf("Ingredient") == -1)
-                    .filter(item => item.Text.indexOf("Qty") == -1)
-                    .filter(item => item.Text.indexOf("Save") == -1)
-                    ;
     let convertJSONString = JSON.stringify(convertedJSON);
-    let extension = pathTools.extname(path);
-    let filename = pathTools.basename(path, extension);
-    let fullfile = filename + extension;
+    
     let url = process.env.FS_URL + fullfile;
-    let postData = {url: url, records: JSON.parse(convertJSONString)};
+    let mp3 = process.env.FS_URL + filename + ".mp3";
+    let postData = {url: url, mp3: mp3, records: JSON.parse(convertJSONString)};
     let postDataString = JSON.stringify(postData);
 
     axios.post(

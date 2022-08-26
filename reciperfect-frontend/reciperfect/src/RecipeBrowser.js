@@ -40,57 +40,37 @@ function SourceLanguageList(item) {
     );
 }
 
-async function handleButtonClick(item) {
-    alert('Steve was here');
-
-    /*
-     // Create an Polly client
-     const pollyClient = new PollyClient();
-
-     let params = {
-         'Text': '',
-         'OutputFormat': 'pcm',
-         'VoiceId': 'Carmen',
-         'LanguageCode': 'es-ES'
-     };
-
-     var speechData = null;
-
-    item.item.records.filter(phrase => phrase.BlockType === "LINE").filter(phrase => phrase.Text.length > 2).map(filteredPhrase => async () => {
-        params.Text = filteredPhrase.Translations[0].TranslatedText;
-        let synthSpeechCommand = new SynthesizeSpeechCommand(params);
-        speechData = await pollyClient.send(synthSpeechCommand);
-            
-        // Create the Speaker instance
-        const player = new Speaker({
-            channels: 1,
-            bitDepth: 16,
-            sampleRate: 16000
-        });
-            
-        if (speechData.AudioStream instanceof Readable) {
-            //var bufferStream = new Stream.PassThrough(speechData.AudioStream);
-            //bufferStream.end(speechData.AudioStream);
-            speechData.AudioStream.on('data', (chunk) => {
-                player.write(chunk);
-            });
-            speechData.AudioStream.on('end', () => {
-                player.end();
-            });
-            //await speechData.AudioStream.destroy();
-        }
-            
-   });
-   */
-}
-
-function PlayButton(items) {
-   return (
-     <button onClick={() => handleButtonClick(items.items.data)}>
-        Play
-     </button>
-   );
-} 
+const useAudio = url => {
+    const [audio] = useState(new Audio(url));
+    const [playing, setPlaying] = useState(false);
+  
+    const toggle = () => setPlaying(!playing);
+  
+    useEffect(() => {
+        playing ? audio.play() : audio.pause();
+      },
+      [playing]
+    );
+  
+    useEffect(() => {
+      audio.addEventListener('ended', () => setPlaying(false));
+      return () => {
+        audio.removeEventListener('ended', () => setPlaying(false));
+      };
+    }, []);
+  
+    return [playing, toggle];
+  };
+  
+  const Player = ({ url }) => {
+    const [playing, toggle] = useAudio(url);
+  
+    return (
+      <div>
+        <button onClick={toggle}>{playing ? "Pause" : "Play"}</button>
+      </div>
+    );
+  };
 
 function RecipeList(items) {
    
@@ -103,7 +83,7 @@ function RecipeList(items) {
                     {items.items.data.map(item => (
                         <>
                         <tr><th>Uploaded Recipe</th><th>Source Language: en</th><th>Target Language: es</th></tr>
-                        <tr><th></th><th></th><th><PlayButton/></th></tr>
+                        <tr><th></th><th></th><th><Player url = {item.mp3}/></th></tr>
                         <tr key={item._id} vertical-align="top">
 
                             <td width="30%"><img src={item.url} width="500" height="800"/></td>
