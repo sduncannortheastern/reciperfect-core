@@ -4,6 +4,9 @@ table, th, td {
   text-align: center;
 }
 
+th {
+  background-color: lightblue;
+}
 .App {
   text-align: center;
 }

@@ -5,72 +5,73 @@ import axios from 'axios';
 import './App.css';
 
 function TargetLanguageList(item) {
-    //To-do: remove hardcoded language codes
+    
     return (
        
-            <table width="100%" vertical-align="top">
-                <tbody vertical-align="top"> 
-                    
-                    {item.item.records.filter(phrase => phrase.BlockType === "LINE").filter(phrase => phrase.Text.length > 2).map(filteredPhrase => {
-                        return (
-                            <tr key={filteredPhrase._id}>
-                                <td>{filteredPhrase.Translations[0].TranslatedText} </td>
-                            </tr>
-                    )})}
-                    
-                </tbody>
-            </table>
+        <table width="100%" vertical-align="top">
+            <tbody vertical-align="top"> 
+                
+                {item.item.records.filter(phrase => phrase.BlockType === "LINE").filter(phrase => phrase.Text.length > 2).map(filteredPhrase => {
+                    return (
+                        <tr key={filteredPhrase._id}>
+                            <td>{filteredPhrase.Translations[0].TranslatedText} </td>
+                        </tr>
+                )})}
+                
+            </tbody>
+        </table>
     );
 }
+
 function SourceLanguageList(item) {
    
     return (
        
-            <table width="100%" vertical-align="top">
-                <tbody vertical-align="top"> 
-                    
-                    {item.item.records.filter(phrase => phrase.BlockType === "LINE").filter(phrase => phrase.Text.length > 2).map(filteredPhrase => {
-                        return (
-                            <tr key={filteredPhrase._id}>
-                                <td>{filteredPhrase.Text} </td>
-                            </tr>
-                    )})}
-                </tbody>
-            </table>
+        <table width="100%" vertical-align="top">
+            <tbody vertical-align="top"> 
+                
+                {item.item.records.filter(phrase => phrase.BlockType === "LINE").filter(phrase => phrase.Text.length > 2).map(filteredPhrase => {
+                    return (
+                        <tr key={filteredPhrase._id}>
+                            <td>{filteredPhrase.Text} </td>
+                        </tr>
+                )})}
+            </tbody>
+        </table>
     );
 }
 
 const useAudio = url => {
     const [audio] = useState(new Audio(url));
     const [playing, setPlaying] = useState(false);
-  
+
     const toggle = () => setPlaying(!playing);
-  
+
     useEffect(() => {
         playing ? audio.play() : audio.pause();
-      },
-      [playing]
+        },
+        [playing]
     );
-  
+
     useEffect(() => {
-      audio.addEventListener('ended', () => setPlaying(false));
-      return () => {
+        audio.addEventListener('ended', () => setPlaying(false));
+        return () => {
         audio.removeEventListener('ended', () => setPlaying(false));
-      };
+        };
     }, []);
-  
+
     return [playing, toggle];
-  };
+};
   
-  const Player = ({ url }) => {
+const Player = ({ url }) => {
     const [playing, toggle] = useAudio(url);
-  
+
     return (
-      <div>
+    <div>
         <button onClick={toggle}>{playing ? "Pause" : "Play"}</button>
-      </div>
+    </div>
     );
-  };
+};
 
 function RecipeList(items) {
    
