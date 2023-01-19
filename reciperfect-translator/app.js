@@ -15,18 +15,20 @@ AWS.config.update({
     region: 'us-west-2'
 });
 
-async function translateAndDisplayRecipe(data, path) {
+async function translateAndStoreRecipe(data, path) {
     var translateParams = {
         SourceLanguageCode: 'auto',
         TargetLanguageCode: 'es-ES',
         Text: ''
     }
 
+    // Create an AWS Translate client
     const client = new TranslateClient();
     
-    // Create an Polly client
+    // Create an AWS Polly client
     const pollyClient = new PollyClient();
 
+    // Polly parameters (output in mp3 in Spanish using 'Camila's' voice)
     let params = {
         'Text': '',
         'OutputFormat': 'mp3',
@@ -65,6 +67,7 @@ async function translateAndDisplayRecipe(data, path) {
 
     data = convertedJSON;
 
+    // Rifle through the text that was output and Translate it to the output language (Spanish)
     for (i=0; i<data.length; i++) {
         if (data[i].BlockType == "LINE") {
             
@@ -77,17 +80,17 @@ async function translateAndDisplayRecipe(data, path) {
             translation = {TargetLanguageCode: translateParams.TargetLanguageCode, TranslatedText: esdata.TranslatedText};
             convertedJSON[i].Translations.push(translation);
 
-            
-
             //convertedJSON[i].TranslatedText = esdata.TranslatedText;
             params.Text = esdata.TranslatedText;
             let synthSpeechCommand = new SynthesizeSpeechCommand(params);
             speechData = await pollyClient.send(synthSpeechCommand);
             
+            //If you get audio back
             if (speechData.AudioStream instanceof Readable) {
                 //var bufferStream = new Stream.PassThrough(speechData.AudioStream);
                 //bufferStream.end(speechData.AudioStream);
                 console.log("here");
+                //Append the returned stream to an mp3 file
                 speechData.AudioStream.on('data', (chunk) => {
                     fs.appendFileSync(process.env.UPLOAD_DIR + filename + '.mp3', chunk);
                 });
@@ -108,6 +111,7 @@ async function translateAndDisplayRecipe(data, path) {
     let postData = {url: url, mp3: mp3, records: JSON.parse(convertJSONString)};
     let postDataString = JSON.stringify(postData);
 
+    //Write the Textract and Translate JSON output for the recipe to the mongodb database to later be rendered in the user interface
     axios.post(
         add_url,
         postDataString,
@@ -144,7 +148,7 @@ function processFile(path) {
         if (err) {
             return err;
         } else {
-            translateAndDisplayRecipe(data.Blocks, path);
+            translateAndStoreRecipe(data.Blocks, path);
         }
     });
     
