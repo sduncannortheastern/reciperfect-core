@@ -146,9 +146,13 @@ function processFile(path) {
     
     request = textract.analyzeDocument(detectParamater, (err, data) => {
         if (err) {
+
             return err;
+
         } else {
+
             translateAndStoreRecipe(data.Blocks, path);
+            
         }
     });
     
