@@ -1,25 +1,12 @@
-/* Global Resets and Base Styles */
-body {
-  font-family: sans-serif;
-  margin: 0;
-  padding: 20px;
-  background-color: #f4f4f4;
-  color: #333;
-}
-
-/* Remove default border and collapse for tables if any are still used elsewhere */
-table {
+table, th, td {
+  border: 1px solid black;
   border-collapse: collapse;
-  width: 100%; /* Default for any remaining tables */
+  text-align: center;
 }
 
-th, td {
-  border: none; /* Remove global borders; specific components can add them if needed */
-  padding: 8px;
-  text-align: left; /* Default alignment */
+th {
+  background-color: lightblue;
 }
-
-/* App specific styles */
 .App {
   text-align: center;
 }
@@ -57,135 +44,4 @@ th, td {
   to {
     transform: rotate(360deg);
   }
-}
-
-/* Recipe Browser Specific Styles */
-.recipe-browser-container {
-  padding: 20px;
-}
-
-.status-message {
-  padding: 15px;
-  border-radius: 5px;
-  background-color: #eef;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.error-message {
-  background-color: #fdd;
-  color: #900;
-  border: 1px solid #900;
-}
-
-.recipe-list {
-  display: flex;
-  flex-direction: column;
-  gap: 30px; /* Space between recipe items */
-}
-
-.recipe-item {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.recipe-header {
-  display: flex;
-  justify-content: space-between; /* Distribute titles */
-  font-weight: bold;
-  padding-bottom: 10px;
-  margin-bottom: 15px;
-  border-bottom: 1px solid #eee;
-  background-color: lightblue; /* Retaining header background from original table th */
-  padding: 10px;
-  border-radius: 5px 5px 0 0; /* Rounded corners for top */
-}
-
-.recipe-header-title {
-  flex: 1; /* Each title takes equal space */
-  text-align: center; /* Center text within each title area */
-}
-
-.recipe-header-title:not(:last-child) {
-  border-right: 1px solid #ddd; /* Separator lines */
-}
-
-
-.recipe-content {
-  display: flex;
-  gap: 20px; /* Space between columns */
-  align-items: flex-start; /* Align items to the top */
-}
-
-.recipe-image-cell {
-  flex: 0 0 400px; /* Fixed width for image container, adjust as needed */
-  /* Removed width: 30% to allow image to define its container width up to a point */
-}
-
-.recipe-image {
-  max-width: 100%;
-  height: auto; /* Maintain aspect ratio */
-  border-radius: 4px;
-  border: 1px solid #eee;
-}
-
-.recipe-language-cell {
-  flex: 1; /* Takes up remaining space equally with other language cell */
-  min-width: 0; /* Prevent overflow issues with flex items */
-  padding: 0 10px; /* Some spacing around language lists */
-}
-
-.recipe-player-cell {
-  /* This cell was previously part of the header section in the table structure */
-  /* Now it's part of the content row, but might be better placed or styled differently */
-  display: flex;
-  align-items: center; /* Vertically center player button if needed */
-  justify-content: center; /* Horizontally center */
-  padding-top: 10px; /* Add some space if it feels too cramped */
-  /* It's currently in the main content flow, taking space from language cells if they are too wide */
-  /* Consider if it should be above or within one of the other cells, or have a fixed width */
-  flex-basis: 100px; /* Give it a base size */
-  flex-grow: 0; /* Don't let it grow too much */
-}
-
-.player-button {
-  padding: 8px 15px;
-  background-color: #5cb85c;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1em;
-}
-
-.player-button:hover {
-  background-color: #4cae4c;
-}
-
-.language-list {
-  /* This container for phrases doesn't need much styling itself unless borders/padding are desired */
-  max-height: 700px; /* Same as image height for alignment */
-  overflow-y: auto; /* Allow scrolling for long lists of phrases */
-  padding: 5px;
-  border: 1px solid #f0f0f0;
-  border-radius: 4px;
-  background-color: #f9f9f9;
-}
-
-.language-list-item {
-  padding: 6px 0; /* Vertical padding for each phrase */
-  border-bottom: 1px solid #eee; /* Separator for phrases */
-}
-
-.language-list-item:last-child {
-  border-bottom: none; /* No border for the last item */
-}
-
-.language-list-empty {
-  color: #777;
-  font-style: italic;
-  padding: 10px;
 }
