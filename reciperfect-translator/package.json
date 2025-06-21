@@ -1,23 +1,20 @@
 {
-  "name": "reciperfect",
-  "version": "1.0.0",
-  "description": "Translate Recipes",
+  "name": "reciperfect-translator",
+  "version": "1.0.1",
+  "description": "Translate Recipes using AWS Textract, Translate, and Polly",
   "main": "app.js",
   "scripts": {
-    "test": "test"
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Duncan",
+  "author": "Duncan (Updated by Jules)",
   "license": "MIT",
   "dependencies": {
-    "@aws-sdk/client-polly": "^3.121.0",
-    "@aws-sdk/client-translate": "^3.121.0",
-    "aws-sdk": "^2.1167.0",
-    "axios": "^0.27.2",
-    "bluebird": "^3.7.2",
-    "chokidar": "^3.5.3",
-    "dotenv": "^16.0.1",
-    "path": "^0.12.7",
-    "speaker": "^0.5.4",
-    "stream": "^0.0.2"
+    "@aws-sdk/client-polly": "^3.525.0",
+    "@aws-sdk/client-textract": "^3.525.0",
+    "@aws-sdk/client-translate": "^3.525.0",
+    "axios": "^1.6.7",
+    "chokidar": "^3.6.0",
+    "dotenv": "^16.4.5"
   }
 }
